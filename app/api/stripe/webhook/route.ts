@@ -3,8 +3,7 @@
 import { stripe } from "@/lib/stripe";
 import { NextRequest, NextResponse } from "next/server";
 
-// Tell Next.js NOT to parse the body — Stripe needs the raw bytes to verify signature
-export const config = { api: { bodyParser: false } };
+// Raw body is read via req.text() — no bodyParser config needed in App Router
 
 export async function POST(req: NextRequest) {
   const body = await req.text();

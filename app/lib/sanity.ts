@@ -71,3 +71,34 @@ export const QUERIES = {
     }
   `,
 };
+// ── Xavier London Art queries (appended) ───────────────────────────────────
+
+export const XAVIER_QUERIES = {
+
+  xavierProducts: `
+    *[_type == "product" && brand == "xavier"] | order(featured desc, _createdAt desc) {
+      _id, title, slug, category, price, images, inventory,
+      isOneOfOne, hasApparel, availableSizes, featured, shortDescription
+    }
+  `,
+
+  xavierProductBySlug: `
+    *[_type == "product" && slug.current == $slug && brand == "xavier"][0] {
+      _id, title, slug, category, price, stripePriceId, images, inventory,
+      description, shortDescription, isOneOfOne, hasApparel, availableSizes,
+      sizeChart, physicalSpecs, featured
+    }
+  `,
+
+  xavierJournals: `
+    *[_type == "manuscript" && brand == "xavier"] | order(publishedAt desc) {
+      _id, title, slug, coverImage, excerpt, publishedAt, tags
+    }
+  `,
+
+  xavierJournalBySlug: `
+    *[_type == "manuscript" && slug.current == $slug && brand == "xavier"][0] {
+      _id, title, slug, coverImage, excerpt, body, publishedAt, tags
+    }
+  `,
+};

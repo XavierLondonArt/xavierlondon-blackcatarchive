@@ -7,6 +7,8 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const baseUrl = process.env.NEXTAUTH_URL ?? process.env.NEXT_PUBLIC_SITE_URL;
+    // Which brand is checking out — determines success/cancel URLs
+    const brand: "blackcat" | "xavier" = body.brand === "xavier" ? "xavier" : "blackcat";
 
     if (!baseUrl) {
       return NextResponse.json(
@@ -88,8 +90,8 @@ export async function POST(req: NextRequest) {
       shipping_address_collection: { allowed_countries: ["US"] },
       shipping_options:     shippingOptions,
       metadata,
-      success_url: `${baseUrl}/blackcatarchive/order-confirmed?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url:  `${baseUrl}/blackcatarchive/cart`,
+      success_url: `${baseUrl}/${brand === "xavier" ? "xavierlondon-art" : "blackcatarchive"}/order-confirmed?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url:  `${baseUrl}/${brand === "xavier" ? "xavierlondon-art" : "blackcatarchive"}/cart`,
     });
 
     return NextResponse.json({ url: session.url });

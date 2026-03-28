@@ -1,4 +1,6 @@
-import { XavierVaultTrigger } from "@/components/xavier/XavierVaultTrigger";
+import { XavierVaultTrigger }   from "@/components/xavier/XavierVaultTrigger";
+import { XavierCartProvider }   from "@/components/xavier/XavierCartContent";
+import { XavierCartNavCount }   from "@/components/xavier/XavierCartNavCount";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function XavierLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <XavierCartProvider>
       <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap"
@@ -62,14 +64,7 @@ export default function XavierLayout({ children }: { children: React.ReactNode }
             <ul className="flex items-center gap-8 ml-auto">
               <XavierNavLink href="/xavierlondon-art/journals">Journal</XavierNavLink>
               <XavierNavLink href="/xavierlondon-art/about">About</XavierNavLink>
-              <li>
-                <Link
-                  href="/xavierlondon-art/cart"
-                  className="text-[9.5px] tracking-[0.4em] uppercase text-[#1a1a1a]/40 hover:text-[#1a1a1a] transition-colors duration-300"
-                >
-                  Bag (0)
-                </Link>
-              </li>
+              <XavierCartNavCount />
               <li><XavierVaultTrigger/></li>
             </ul>
 
@@ -141,7 +136,7 @@ export default function XavierLayout({ children }: { children: React.ReactNode }
         </footer>
 
       </div>
-    </>
+    </XavierCartProvider>
   );
 }
 
