@@ -1,7 +1,8 @@
-import { BlackCatVaultTrigger } from "@/app/components/blackcat/BlackCatVaultTrigger";
-import type { Metadata } from "next";
-import Link from "next/link";
-
+import { BlackCatVaultTrigger } from "@/components/blackcat/BlackCatVaultTrigger";
+import { CartProvider }         from "@/components/blackcat/CartContent";
+import { CartNavCount }         from "@/components/blackcat/CartNavCount";
+import type { Metadata }        from "next";
+import Link                     from "next/link";
 
 export const metadata: Metadata = {
   title: { template: "%s | BLACK CAT ARCHIVE", default: "BLACK CAT ARCHIVE" },
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function BlackCatLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <CartProvider>
       <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap"
@@ -45,7 +46,7 @@ export default function BlackCatLayout({ children }: { children: React.ReactNode
           <nav className="flex items-center justify-between px-6 md:px-12 py-4">
 
             <Link href="/blackcatarchive" className="group flex flex-col leading-none select-none">
-            <span className="text-[7px] tracking-[0.7em] uppercase text-white/25 -mt-0.5">
+              <span className="text-[7px] tracking-[0.7em] uppercase text-white/25 -mt-0.5">
                 THE
               </span>
               <span
@@ -68,13 +69,8 @@ export default function BlackCatLayout({ children }: { children: React.ReactNode
             </ul>
 
             <div className="flex items-center gap-5">
-              <Link
-                href="/blackcatarchive/cart"
-                className="text-[10px] tracking-[0.3em] uppercase text-white/35 hover:text-white transition-colors duration-200"
-              >
-                Cart [0]
-              </Link>
-              <BlackCatVaultTrigger/>
+              <CartNavCount />
+              <BlackCatVaultTrigger />
               <button aria-label="Menu" className="md:hidden flex flex-col gap-1.5 ml-2">
                 <span className="block w-6 h-px bg-white/50" />
                 <span className="block w-4 h-px bg-white/50" />
@@ -129,10 +125,16 @@ export default function BlackCatLayout({ children }: { children: React.ReactNode
             <div>
               <p className="text-[9px] tracking-[0.5em] uppercase text-white/22 mb-5">Navigate</p>
               <ul className="space-y-3">
-                {["Archive TV","Manuscripts & Dispatches","Purchase","Archive Records","About"].map((l) => (
-                  <li key={l}>
-                    <Link href="#" className="text-xs tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">
-                      {l}
+                {[
+                  ["Archive TV",              "/blackcatarchive/archive-tv"],
+                  ["Manuscripts & Dispatches","/blackcatarchive/blog"],
+                  ["Purchase",                "/blackcatarchive/shop"],
+                  ["Archive Records",         "/blackcatarchive/drops"],
+                  ["About",                   "/blackcatarchive/about"],
+                ].map(([label, href]) => (
+                  <li key={label}>
+                    <Link href={href} className="text-xs tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">
+                      {label}
                     </Link>
                   </li>
                 ))}
@@ -177,7 +179,7 @@ export default function BlackCatLayout({ children }: { children: React.ReactNode
           to   { transform: translateX(-50%); }
         }
       `}</style>
-    </>
+    </CartProvider>
   );
 }
 

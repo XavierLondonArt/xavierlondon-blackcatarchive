@@ -6,8 +6,8 @@
  * On first visit this session: film leader → enter button → video → site.
  * On subsequent visits: goes straight to the site content.
  */
-import { BlackCatIntro } from "@/app/components/blackcat/BlackCatIntro";
-import {BlackCatHomeContent} from "../../components/blackcat/BlackCatHomeContent";
+import { BlackCatIntro } from "@/components/blackcat/BlackCatIntro";
+import {BlackCatHomeContent} from "../../../components/blackcat/BlackCatHomeContent";
 
 
 export const metadata = {

@@ -1,4 +1,4 @@
-import { XavierVaultTrigger } from "@/app/components/xavier/XavierVaultTrigger";
+import { XavierVaultTrigger } from "@/components/xavier/XavierVaultTrigger";
 import type { Metadata } from "next";
 import Link from "next/link";
 

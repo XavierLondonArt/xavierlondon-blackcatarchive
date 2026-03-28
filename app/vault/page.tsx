@@ -217,13 +217,13 @@ export default function VaultPage() {
           >
             Xavier London
           </Link>
-          <span className="text-white/8 text-[8px]">·</span>
+          <span className="text-white/8 text-[8px]">X</span>
           <Link
             href="/blackcatarchive"
             className="text-[8px] tracking-[0.4em] uppercase text-white/12 hover:text-white/30 transition-colors duration-300"
             style={{ fontFamily: "'Courier Prime',monospace" }}
           >
-            Black Cat Archive
+            The Black Cat Archive
           </Link>
         </div>
       </div>
@@ -276,7 +276,7 @@ function VaultOpen() {
             className="text-sm font-light text-white/28 max-w-md mx-auto leading-relaxed"
             style={{ fontFamily: "'Cormorant Garamond',serif" }}
           >
-            Ninth Life. The space between Xavier London and Black Cat Archive.
+            Ninth Life. The space between Xavier London and The Black Cat Archive.
             Collaborative works available to those who know where to look.
           </p>
           <div className="flex items-center justify-center gap-4 mt-10">
@@ -296,7 +296,7 @@ function VaultOpen() {
             className="text-[10px] tracking-[0.5em] uppercase text-white/15"
             style={{ fontFamily: "'Courier Prime',monospace" }}
           >
-            First drop — coming soon
+            First Entry — coming soon
           </p>
         </div>
 
@@ -308,13 +308,13 @@ function VaultOpen() {
           >
             Xavier London Art
           </Link>
-          <span className="text-white/8">·</span>
+          <span className="text-white/8">X</span>
           <Link
             href="/blackcatarchive"
             className="text-[9px] tracking-[0.4em] uppercase text-white/18 hover:text-white/45 transition-colors duration-300"
             style={{ fontFamily: "'Courier Prime',monospace" }}
           >
-            Black Cat Archive
+           The Black Cat Archive
           </Link>
         </div>
       </div>
