@@ -177,16 +177,16 @@ export default function XavierProductPage() {
     if (product.hasApparel && !selectedSize) { setError("Please select a size."); return; }
     setError("");
     addItem({
-      productId:    product._id,
-      slug:         product.slug?.current,
-      title:        product.title,
-      price:        product.price,
-      size:         selectedSize || "N/A",
-      image:        product.images?.[0]?.asset?._ref
-                      ? imgUrl(product.images[0].asset._ref, projectId, 400)
-                      : undefined,
+      productId:     product._id,
+      slug:          product.slug?.current,
+      title:         product.title,
+      price:         product.price ?? 0,          // null-safe — never write null to cart
+      size:          selectedSize || "N/A",
+      image:         product.images?.[0]?.asset?._ref
+                       ? imgUrl(product.images[0].asset._ref, projectId, 400)
+                       : undefined,
       stripePriceId: product.stripePriceId ?? "",
-      inventory:    product.inventory,
+      inventory:     product.inventory,
     });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2200);
@@ -201,11 +201,11 @@ export default function XavierProductPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          brand:        "xavier",
+          brand:         "xavier",
           stripePriceId: product.stripePriceId,
-          quantity:     1,
-          size:         selectedSize || "N/A",
-          productTitle: product.title,
+          quantity:      1,
+          size:          selectedSize || "N/A",
+          productTitle:  product.title,
         }),
       });
       const data = await res.json();
@@ -343,9 +343,15 @@ export default function XavierProductPage() {
             </p>
           )}
 
-          {/* Price */}
+          {/* Price — null-safe display */}
           <p className="text-lg font-light text-[#1a1a1a]/70 mb-8 tracking-wide">
-            {isInquiry ? "Inquiry only" : sold ? "—" : `$${product.price}`}
+            {isInquiry
+              ? "Inquiry only"
+              : sold
+              ? "—"
+              : product.price != null
+              ? `$${product.price}`
+              : "—"}
           </p>
 
           {/* Description */}
@@ -369,10 +375,10 @@ export default function XavierProductPage() {
                       <button key={size} onClick={() => setSelectedSize(size)}
                         className="px-4 py-2 text-xs tracking-widest uppercase border transition-all duration-200"
                         style={{
-                          fontFamily:       "'Cormorant Garamond','Georgia',serif",
-                          borderColor:      selectedSize === size ? "rgba(26,26,26,0.6)" : "rgba(26,26,26,0.15)",
-                          color:            selectedSize === size ? "rgba(26,26,26,0.85)" : "rgba(26,26,26,0.4)",
-                          backgroundColor:  selectedSize === size ? "rgba(26,26,26,0.04)" : "transparent",
+                          fontFamily:      "'Cormorant Garamond','Georgia',serif",
+                          borderColor:     selectedSize === size ? "rgba(26,26,26,0.6)" : "rgba(26,26,26,0.15)",
+                          color:           selectedSize === size ? "rgba(26,26,26,0.85)" : "rgba(26,26,26,0.4)",
+                          backgroundColor: selectedSize === size ? "rgba(26,26,26,0.04)" : "transparent",
                         }}>
                         {size}
                       </button>
@@ -412,8 +418,8 @@ export default function XavierProductPage() {
                     Inquire about this work
                   </p>
                   {[
-                    { key: "name",    placeholder: "Your name",    type: "text"  },
-                    { key: "email",   placeholder: "Your email",   type: "email" },
+                    { key: "name",    placeholder: "Your name",    type: "text"     },
+                    { key: "email",   placeholder: "Your email",   type: "email"    },
                     { key: "message", placeholder: "Your message", type: "textarea" },
                   ].map(f => (
                     f.type === "textarea" ? (

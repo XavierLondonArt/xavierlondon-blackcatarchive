@@ -36,10 +36,14 @@ export function XavierCartProvider({ children }: { children: React.ReactNode }) 
   const [items, setItems]       = useState<XavierCartItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
+  // Hydrate from localStorage — scrub any null/corrupt prices from old sessions
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) setItems(JSON.parse(stored));
+      if (stored) {
+        const parsed: XavierCartItem[] = JSON.parse(stored);
+        setItems(parsed.map(i => ({ ...i, price: Number(i.price) || 0 })));
+      }
     } catch {}
     setHydrated(true);
   }, []);
@@ -58,7 +62,12 @@ export function XavierCartProvider({ children }: { children: React.ReactNode }) 
           i.id === id ? { ...i, quantity: Math.min(i.quantity + 1, i.inventory) } : i
         );
       }
-      return [...prev, { ...incoming, id, quantity: 1 }];
+      return [...prev, {
+        ...incoming,
+        id,
+        quantity: 1,
+        price: Number(incoming.price) || 0,   // coerce null/undefined to 0
+      }];
     });
   }, []);
 

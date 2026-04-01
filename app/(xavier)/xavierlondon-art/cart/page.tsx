@@ -114,8 +114,9 @@ export default function XavierCartPage() {
                       Size: {item.size}
                     </p>
                   )}
+                  {/* null-safe price display */}
                   <p className="text-sm font-light text-[#1a1a1a]/50 mb-4">
-                    ${item.price.toFixed(2)}
+                    ${(item.price ?? 0).toFixed(2)}
                   </p>
 
                   <div className="flex items-center justify-between gap-4">
@@ -142,10 +143,10 @@ export default function XavierCartPage() {
                   </div>
                 </div>
 
-                {/* Line total */}
+                {/* Line total — null-safe */}
                 <div className="text-right flex-shrink-0">
                   <p className="text-sm font-light text-[#1a1a1a]/60">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ${((item.price ?? 0) * item.quantity).toFixed(2)}
                   </p>
                 </div>
               </div>

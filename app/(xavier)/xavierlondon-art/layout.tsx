@@ -44,9 +44,8 @@ export default function XavierLayout({ children }: { children: React.ReactNode }
           <nav className="relative flex items-center justify-between px-8 md:px-16 py-5 border-b border-[#1a1a1a]/10">
 
             <ul className="hidden md:flex items-center gap-10">
-              <XavierNavLink href="/xavierlondon-art/shop">Collections</XavierNavLink>
-              <XavierNavLink href="/xavierlondon-art/shop?category=art">Fine Art</XavierNavLink>
-              <XavierNavLink href="/xavierlondon-art/shop?category=clothing">Wearables</XavierNavLink>
+              <XavierNavLink href="/xavierlondon-art/collections">Collections</XavierNavLink>
+              <XavierNavLink href="/xavierlondon-art/archival-prints">Archival Prints</XavierNavLink>
             </ul>
 
             <Link
@@ -80,10 +79,15 @@ export default function XavierLayout({ children }: { children: React.ReactNode }
             <div>
               <p className="text-[9px] tracking-[0.5em] uppercase text-[#1a1a1a]/35 mb-5">Navigate</p>
               <ul className="space-y-2.5">
-                {["Collections","Fine Art","Wearables","Journal","About"].map((l) => (
-                  <li key={l}>
-                    <Link href="#" className="text-sm font-light text-[#1a1a1a]/45 hover:text-[#1a1a1a] transition-colors duration-300 tracking-wide">
-                      {l}
+                {[
+                  ["Collections",     "/xavierlondon-art/collections"    ],
+                  ["Archival Prints", "/xavierlondon-art/archival-prints" ],
+                  ["Journal",         "/xavierlondon-art/journals"        ],
+                  ["About",           "/xavierlondon-art/about"           ],
+                ].map(([label, href]) => (
+                  <li key={label}>
+                    <Link href={href} className="text-sm font-light text-[#1a1a1a]/45 hover:text-[#1a1a1a] transition-colors duration-300 tracking-wide">
+                      {label}
                     </Link>
                   </li>
                 ))}

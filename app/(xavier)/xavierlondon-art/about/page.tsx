@@ -38,7 +38,7 @@ export default function XavierAboutPage() {
         {/* Portrait */}
         <div className="relative aspect-[3/4] bg-[#e5e0d8] overflow-hidden">
           <Image
-            src="/artwork/xlart.jpg"
+            src="/xlart.jpg"
             alt="Xavier London"
             fill
             className="object-cover"

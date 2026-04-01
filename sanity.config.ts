@@ -8,10 +8,9 @@ export default defineConfig({
   name:  "xavierlondon",
   title: "xavierlondon.art Studio",
 
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  projectId: "e8tv2u1f",   // hardcoded — not a secret, safe to commit
   dataset:   "production",
 
-  // Tell Sanity Studio its base URL so routing works correctly
   basePath: "/studio",
 
   plugins: [structureTool(), visionTool()],

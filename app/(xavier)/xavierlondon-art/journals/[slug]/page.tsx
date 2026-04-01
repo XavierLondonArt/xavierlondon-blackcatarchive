@@ -8,8 +8,6 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
-// ── Portable Text components ─────────────────────────────────────────────────
-
 const ptComponents = {
   block: {
     normal: ({ children }: any) => (
@@ -70,26 +68,33 @@ const ptComponents = {
   },
 };
 
-// ── Page ─────────────────────────────────────────────────────────────────────
+// Next.js 15: params is a Promise — must be awaited
+export default async function JournalEntryPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
-export default async function JournalEntryPage({ params }: { params: { slug: string } }) {
   const post = await sanityClient
-    .fetch(XAVIER_QUERIES.xavierJournalBySlug, { slug: params.slug })
+    .fetch(XAVIER_QUERIES.xavierJournalBySlug, { slug })
     .catch(() => null);
 
   if (!post) notFound();
 
   const dateStr = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
+    ? new Date(post.publishedAt).toLocaleDateString("en-US", {
+        month: "long", day: "numeric", year: "numeric",
+      })
     : null;
 
   return (
     <div className="min-h-screen bg-[#f7f4ef] text-[#1a1a1a]">
 
-      {/* Hero */}
       <div className="max-w-3xl mx-auto px-8 md:px-16 pt-20 pb-12">
         <nav className="flex items-center gap-3 text-[8px] tracking-[0.4em] uppercase text-[#1a1a1a]/28 mb-12">
-          <Link href="/xavierlondon-art/journals" className="hover:text-[#1a1a1a] transition-colors duration-200">
+          <Link href="/xavierlondon-art/journals"
+            className="hover:text-[#1a1a1a] transition-colors duration-200">
             Journal
           </Link>
           <span>/</span>
@@ -115,7 +120,6 @@ export default async function JournalEntryPage({ params }: { params: { slug: str
           </p>
         )}
 
-        {/* Tags */}
         {post.tags?.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-10">
             {post.tags.map((tag: string) => (
@@ -128,7 +132,6 @@ export default async function JournalEntryPage({ params }: { params: { slug: str
           </div>
         )}
 
-        {/* Cover image */}
         {post.coverImage && (
           <div className="relative w-full aspect-[16/9] bg-[#ede9e2] overflow-hidden mb-14">
             <Image
@@ -144,14 +147,12 @@ export default async function JournalEntryPage({ params }: { params: { slug: str
         <div className="h-px w-16 bg-[#1a1a1a]/15 mb-14" />
       </div>
 
-      {/* Body */}
       {post.body && (
         <article className="max-w-3xl mx-auto px-8 md:px-16 pb-20">
           <PortableText value={post.body} components={ptComponents} />
         </article>
       )}
 
-      {/* Footer nav */}
       <div className="max-w-3xl mx-auto px-8 md:px-16 py-12 border-t border-[#1a1a1a]/8">
         <Link href="/xavierlondon-art/journals"
           className="text-[9px] tracking-[0.4em] uppercase text-[#1a1a1a]/30 hover:text-[#1a1a1a] transition-colors duration-300">

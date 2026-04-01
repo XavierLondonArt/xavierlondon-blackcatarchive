@@ -102,3 +102,48 @@ export const XAVIER_QUERIES = {
     }
   `,
 };
+
+// ── Xavier page-specific queries (appended) ────────────────────────────────
+
+export const XAVIER_PAGE_QUERIES = {
+
+  // Collections page — all series with their pieces
+  allSeries: `
+    *[_type == "series"] | order(coalesce(order, 999) asc, _createdAt desc) {
+      _id, title, slug, year, shortDescription, coverImage, featured,
+      pieces[]-> {
+        _id, title, slug, category, price, images, inventory, isOneOfOne,
+        medium, year, sizeCategory
+      }
+    }
+  `,
+
+  // Fine Art gallery — all xavier art + reproduction products
+  fineArt: `
+    *[_type == "product" && brand == "xavier" && category in ["art", "reproduction"]]
+    | order(_createdAt desc) {
+      _id, title, slug, category, price, images, inventory, isOneOfOne,
+      medium, year, sizeCategory, featured, shortDescription,
+      series->{ _id, title, slug }
+    }
+  `,
+
+  // Wearables — xavier apparel only
+  wearables: `
+    *[_type == "product" && brand == "xavier" && category == "apparel"]
+    | order(_createdAt desc) {
+      _id, title, slug, category, price, images, inventory,
+      hasApparel, availableSizes, shortDescription, featured
+    }
+  `,
+
+  // Reproductions — xavier reproduction category only
+  reproductions: `
+    *[_type == "product" && brand == "xavier" && category == "reproduction"]
+    | order(_createdAt desc) {
+      _id, title, slug, category, price, images, inventory, isOneOfOne,
+      medium, year, editionSize, shortDescription, featured,
+      series->{ _id, title, slug }
+    }
+  `,
+};

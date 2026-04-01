@@ -144,7 +144,7 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-          <img src="/ninthlifeticket.png" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt="ninthlifeticket" width={180} height={180} style={{ margin: "2.5rem auto 1rem" }} />
+          <img src="/ninthlifeticket.png" className="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt="ninthlifeticket" width={180} height={180} style={{ margin: "2.5rem auto 1rem" }} />
 
       {/* ════════════════════════════════════════════════════════
           WHAT WE DO — three pillars

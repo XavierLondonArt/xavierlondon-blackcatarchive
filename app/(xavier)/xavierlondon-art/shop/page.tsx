@@ -7,11 +7,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 const CATEGORIES = [
-  { value: "all",         label: "All"          },
-  { value: "art",         label: "Fine Art"     },
-  { value: "apparel",     label: "Apparel"      },
-  { value: "accessories", label: "Accessories"  },
-  { value: "archival",    label: "Archival"     },
+  { value: "all",          label: "All"            },
+  { value: "art",          label: "Originals"      },
+  { value: "reproduction", label: "Prints"         },
 ];
 
 interface SanityProduct {
@@ -41,7 +39,7 @@ export default function XavierShopPage() {
 
   useEffect(() => {
     const query = encodeURIComponent(
-      `*[_type=="product"&&brand=="xavier"]|order(featured desc,_createdAt desc){
+      `*[_type=="product"&&brand=="xavier"&&category in ["art","reproduction"]]|order(featured desc,_createdAt desc){
         _id,title,slug,category,price,
         images[]{asset{_ref}},
         inventory,isOneOfOne,featured,shortDescription

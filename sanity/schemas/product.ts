@@ -50,11 +50,12 @@ export const product = {
       description: "Pick the closest group. Use Archival for 1-of-1 inquiry-only pieces.",
       options: {
         list: [
-          { title: "Apparel — T-shirts, hoodies, clothing",           value: "apparel"      },
-          { title: "Accessories — Jewelry, keychains, wearables",     value: "accessories"  },
-          { title: "Collectibles — Cards, stickers, comics, zines",   value: "collectibles" },
-          { title: "Art & Objects — Prints, sculptures, flags",       value: "art"          },
-          { title: "Archival — 1-of-1 unique pieces (inquiry only)",  value: "archival"     },
+          { title: "Fine Art — Original paintings, drawings, objects",  value: "art"          },
+          { title: "Reproduction — Limited edition prints",            value: "reproduction" },
+          { title: "Apparel — Clothing, wearables",                    value: "apparel"      },
+          { title: "Accessories — Jewelry, keychains",                 value: "accessories"  },
+          { title: "Collectibles — Cards, stickers, zines",            value: "collectibles" },
+          { title: "Archival — 1-of-1 inquiry-only",                   value: "archival"     },
         ],
         layout: "radio",
       },
@@ -75,6 +76,140 @@ export const product = {
       group: "core",
       rows: 2,
       description: "One or two lines shown on cards and the archive catalog. Keep it punchy.",
+    },
+
+    // ── Xavier fine art fields ────────────────────────────────────────────
+    {
+      name: "series",
+      type: "reference",
+      title: "Series",
+      group: "core",
+      description: "Which series does this piece belong to? Set in the Series document too.",
+      to: [{ type: "series" }],
+    },
+    {
+      name: "medium",
+      type: "string",
+      title: "Medium",
+      group: "core",
+      description: 'e.g. "Oil on canvas", "Acrylic and graphite on panel", "Archival inkjet print"',
+    },
+    {
+      name: "year",
+      type: "string",
+      title: "Year",
+      group: "core",
+      description: 'Year created, e.g. "2024"',
+    },
+    {
+      name: "sizeCategory",
+      type: "string",
+      title: "Size Category",
+      group: "core",
+      description: "Used for filtering on the Fine Art gallery page.",
+      options: {
+        list: [
+          { title: "Small — under 18 in",        value: "small"   },
+          { title: "Medium — 18 to 36 in",        value: "medium"  },
+          { title: "Large — 36 to 60 in",         value: "large"   },
+          { title: "Extra Large — over 60 in",    value: "xlarge"  },
+        ],
+        layout: "radio",
+      },
+    },
+    {
+      name: "editionSize",
+      type: "string",
+      title: "Edition Size (legacy)",
+      group: "core",
+      description: 'Legacy field. Use Print Editions below for archival prints.',
+    },
+
+    // ── Archival print editions ───────────────────────────────────────────
+    // Each archival print has two tiers: limited (hand-signed, numbered, CoA)
+    // and open (digitally signed). Each tier has its own Stripe price ID.
+    {
+      name: "printEditions",
+      type: "object",
+      title: "Print Editions",
+      group: "pricing",
+      description: "For Archival Prints only. Define limited and open edition tiers.",
+      hidden: ({ document }: any) => document?.category !== "reproduction",
+      fields: [
+        {
+          name: "limitedActive",
+          type: "boolean",
+          title: "Limited Edition Active",
+          description: "Turn on to show the limited edition tier.",
+          initialValue: false,
+        },
+        {
+          name: "limitedSize",
+          type: "number",
+          title: "Limited Edition Size",
+          description: "Total prints in the limited run, e.g. 50",
+        },
+        {
+          name: "limitedSold",
+          type: "number",
+          title: "Limited Edition Sold",
+          description: "How many have sold. Update manually or via webhook.",
+          initialValue: 0,
+        },
+        {
+          name: "limitedPrice",
+          type: "number",
+          title: "Limited Edition Price (USD)",
+          description: "e.g. 60",
+        },
+        {
+          name: "limitedStripePriceId",
+          type: "string",
+          title: "Limited Edition Stripe Price ID",
+          description: "price_... from Stripe Dashboard",
+        },
+        {
+          name: "limitedIncludes",
+          type: "array",
+          title: "Limited Edition Includes",
+          description: 'e.g. ["Hand-signed", "Numbered", "Certificate of Authenticity"]',
+          of: [{ type: "string" }],
+          options: { layout: "tags" },
+        },
+        {
+          name: "openActive",
+          type: "boolean",
+          title: "Open Edition Active",
+          description: "Turn on to show the open edition tier.",
+          initialValue: false,
+        },
+        {
+          name: "openPrice",
+          type: "number",
+          title: "Open Edition Price (USD)",
+          description: "e.g. 40",
+        },
+        {
+          name: "openStripePriceId",
+          type: "string",
+          title: "Open Edition Stripe Price ID",
+          description: "price_... from Stripe Dashboard",
+        },
+        {
+          name: "openIncludes",
+          type: "array",
+          title: "Open Edition Includes",
+          description: 'e.g. ["Digitally signed", "Unlimited print run"]',
+          of: [{ type: "string" }],
+          options: { layout: "tags" },
+        },
+        {
+          name: "paperSpec",
+          type: "string",
+          title: "Paper / Print Spec",
+          description: 'e.g. "300 gsm fine art cotton rag, archival pigment inks"',
+        },
+      ],
     },
 
     // ── Media ─────────────────────────────────────────────────────────────
