@@ -172,7 +172,7 @@ export function SealedModal({ product, projectId, onClose }: SealedModalProps) {
 
             {/* Images */}
             <div className="p-6 border-b md:border-b-0 md:border-r border-white/8">
-              <div className="relative aspect-square overflow-hidden bg-[#111] mb-2">
+              <div className="relative aspect-square overflow-hidden bg-[#272727] mb-2">
                 {images[activeImg]?.asset ? (
                   <img
                     src={imgUrl(images[activeImg].asset._ref, projectId)}
