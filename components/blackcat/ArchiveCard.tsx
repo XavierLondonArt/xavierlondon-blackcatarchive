@@ -88,7 +88,7 @@ export function ArchiveCard({
       onClick={e => sealed && e.preventDefault()}
       className="group relative flex flex-col overflow-hidden"
       style={{
-        background:  "#272727",
+        background:  "#1a1a1a",
         border:      hovered && !sealed
           ? "1px solid rgba(232,228,223,0.2)"
           : "1px solid rgba(232,228,223,0.07)",

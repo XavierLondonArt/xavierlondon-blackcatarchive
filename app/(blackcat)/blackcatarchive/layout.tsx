@@ -18,7 +18,7 @@ export default function BlackCatLayout({ children }: { children: React.ReactNode
       />
 
       <div
-        className="min-h-screen bg-[#272727] text-[#e8e4df]"
+        className="min-h-screen bg-[#1a1a1a] text-[#e8e4df]"
         style={{ fontFamily: "'Courier Prime','Courier New',monospace" }}
       >
         {/* Heavy grain */}

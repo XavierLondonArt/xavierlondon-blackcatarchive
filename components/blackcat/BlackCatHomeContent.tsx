@@ -90,7 +90,7 @@ function HomeDropCard({ product }: { product: SanityProduct }) {
   return (
     <Link
       href={`/blackcatarchive/shop/${product.slug?.current}`}
-      className="group relative overflow-hidden bg-[#272727] aspect-[3/4] block"
+      className="group relative overflow-hidden bg-[#1a1a1a] aspect-[3/4] block"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -229,7 +229,7 @@ export function BlackCatHomeContent() {
       {/* ══════════════════════════════════════════════════════════════════
           HERO — looping video + featured drop overlay
       ══════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[100svh] flex flex-col items-start justify-end px-6 md:px-12 pb-16 overflow-hidden bg-[#272727]">
+      <section className="relative min-h-[100svh] flex flex-col items-start justify-end px-6 md:px-12 pb-16 overflow-hidden bg-[#1a1a1a]">
 
         {/* Looping hero video */}
         <video
@@ -395,7 +395,7 @@ export function BlackCatHomeContent() {
       {/* ══════════════════════════════════════════════════════════════════
           ARCHIVE TV — latest episodes from Sanity
       ══════════════════════════════════════════════════════════════════ */}
-      <section className="border-t border-white/8 px-6 md:px-12 py-24 bg-[#272727]">
+      <section className="border-t border-white/8 px-6 md:px-12 py-24 bg-[#1a1a1a]">
         <div className="flex items-end justify-between mb-12">
           <div>
             <p className="text-[8px] tracking-[0.6em] uppercase text-white/22 mb-2"
@@ -441,13 +441,13 @@ export function BlackCatHomeContent() {
               return (
                 <Link key={ep._id}
                   href={`/blackcatarchive/archive-tv/${ep.slug?.current}`}
-                  className="group relative overflow-hidden bg-[#272727] aspect-video block">
+                  className="group relative overflow-hidden bg-[#1a1a1a] aspect-video block">
 
                   {thumb ? (
                     <img src={thumb} alt={ep.title}
                       className="absolute inset-0 w-full h-full object-cover opacity-55 group-hover:opacity-75 transition-opacity duration-400" />
                   ) : (
-                    <div className="absolute inset-0 bg-[#272727]" />
+                    <div className="absolute inset-0 bg-[#1a1a1a]" />
                   )}
 
                   <div className="absolute inset-0"
