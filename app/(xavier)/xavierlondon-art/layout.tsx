@@ -1,6 +1,7 @@
 import { XavierVaultTrigger }   from "@/components/xavier/XavierVaultTrigger";
 import { XavierCartProvider }   from "@/components/xavier/XavierCartContent";
 import { XavierCartNavCount }   from "@/components/xavier/XavierCartNavCount";
+import { XavierSubscribeForm }  from "@/components/xavier/XavierSubscribeForm";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -112,19 +113,7 @@ export default function XavierLayout({ children }: { children: React.ReactNode }
               <p className="text-sm font-light text-[#1a1a1a]/40 leading-relaxed mb-5 tracking-wide">
                 Dispatches from the studio. New works, limited editions, quiet observations.
               </p>
-              <form className="flex">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="flex-1 bg-transparent border border-[#1a1a1a]/18 px-4 py-2.5 text-sm font-light tracking-wide placeholder:text-[#1a1a1a]/22 focus:outline-none focus:border-[#1a1a1a]/45 transition-colors duration-300"
-                />
-                <button
-                  type="submit"
-                  className="border border-l-0 border-[#1a1a1a]/18 px-5 py-2.5 text-[9px] tracking-[0.4em] uppercase text-[#1a1a1a]/50 hover:bg-[#1a1a1a] hover:text-[#f7f4ef] hover:border-[#1a1a1a] transition-all duration-300"
-                >
-                  Join
-                </button>
-              </form>
+              <XavierSubscribeForm />
             </div>
 
           </div>

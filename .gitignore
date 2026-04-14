@@ -30,6 +30,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# Stripe CLI binary (local dev tool only — never deploy)
+stripe.exe
+stripe
+
 # env files (can opt-in for committing if needed)
 .env*
 

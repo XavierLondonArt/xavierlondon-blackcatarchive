@@ -1,6 +1,7 @@
 import { BlackCatVaultTrigger } from "@/components/blackcat/BlackCatVaultTrigger";
 import { CartProvider }         from "@/components/blackcat/CartContent";
 import { CartNavCount }         from "@/components/blackcat/CartNavCount";
+import { SubscribeForm }        from "@/components/blackcat/SubscribeForm";
 import type { Metadata }        from "next";
 import Link                     from "next/link";
 
@@ -144,19 +145,7 @@ export default function BlackCatLayout({ children }: { children: React.ReactNode
             <div>
               <p className="text-[9px] tracking-[0.5em] uppercase text-white/22 mb-5">Stay notified</p>
               <p className="text-xs text-white/30 leading-relaxed mb-5">Drop alerts. Archive TV. Nothing else.</p>
-              <form className="flex flex-col gap-2">
-                <input
-                  type="email"
-                  placeholder="email"
-                  className="bg-transparent border border-white/12 px-3 py-2.5 text-xs tracking-wider text-white placeholder:text-white/18 focus:outline-none focus:border-white/35 transition-colors duration-200"
-                />
-                <button
-                  type="submit"
-                  className="border border-white/18 py-2.5 text-[10px] tracking-[0.4em] uppercase text-white/50 hover:bg-white hover:text-black hover:border-white transition-all duration-200"
-                >
-                  Subscribe
-                </button>
-              </form>
+              <SubscribeForm />
             </div>
 
           </div>

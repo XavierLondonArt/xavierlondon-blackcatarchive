@@ -216,19 +216,24 @@ export default function XavierProductPage() {
   };
 
   const handleInquiry = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inquiry.name || !inquiry.email || !inquiry.message) return;
-    setInquiryLoading(true);
-    try {
-      await fetch("/api/inquiry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...inquiry, productTitle: product.title, productSlug: slug }),
-      });
-      setInquirySent(true);
-    } catch {}
-    finally { setInquiryLoading(false); }
-  };
+  e.preventDefault();
+  if (!inquiry.name || !inquiry.email || !inquiry.message) return;
+  setInquiryLoading(true);
+  try {
+    await fetch("/api/inquiry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        ...inquiry, 
+        productTitle: product.title, 
+        productSlug: slug, 
+        brand: "xavier"    // ← add this
+      }),
+    });
+    setInquirySent(true);
+  } catch {}
+  finally { setInquiryLoading(false); }
+};
 
   if (loading) {
     return (

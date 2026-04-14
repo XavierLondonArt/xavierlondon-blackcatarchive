@@ -43,6 +43,7 @@ export async function POST(req: NextRequest) {
         .map((i: any) => `${i.productTitle}: ${i.size}`)
         .join(", ")
         .slice(0, 480);
+      metadata.brand = brand;
     } else {
       // Single-item direct checkout from product page
       const { stripePriceId, quantity, size, productTitle } = body;
@@ -53,6 +54,7 @@ export async function POST(req: NextRequest) {
       metadata = {
         size:         size         ?? "N/A",
         productTitle: productTitle ?? "",
+        brand,
       };
     }
 

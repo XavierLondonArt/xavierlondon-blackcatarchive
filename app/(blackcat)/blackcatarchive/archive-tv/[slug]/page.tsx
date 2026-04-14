@@ -1,6 +1,6 @@
 // app/(blackcat)/blackcatarchive/archive-tv/[slug]/page.tsx
 
-import { sanityClient, QUERIES } from "@/lib/sanity";
+import { sanityClient, QUERIES } from "../../../../lib/sanity";
 import Link from "next/link";
 
 function getYouTubeId(url: string) {
@@ -10,9 +10,10 @@ function getYouTubeId(url: string) {
 
 export const revalidate = 60;
 
-export default async function EpisodePage({ params }: { params: { slug: string } }) {
+export default async function EpisodePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const ep = await sanityClient
-    .fetch(QUERIES.episodeBySlug, { slug: params.slug })
+    .fetch(QUERIES.episodeBySlug, { slug })
     .catch(() => null);
 
   if (!ep) {

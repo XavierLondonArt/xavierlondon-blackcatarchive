@@ -189,7 +189,7 @@ export default function ProductPage() {
     try {
       const res  = await fetch("/api/inquiry", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...inquiry, productTitle: product.title, productSlug: slug }),
+        body: JSON.stringify({ ...inquiry, productTitle: product.title, productSlug: slug, brand: "blackcat" }),
       });
       const data = await res.json();
       if (data.success) setInquirySent(true);
