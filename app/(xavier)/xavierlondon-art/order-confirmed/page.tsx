@@ -49,7 +49,7 @@ function OrderConfirmedContent() {
 
       <p className="text-sm font-light text-[#1a1a1a]/35 mb-14 leading-relaxed max-w-sm"
         style={{ fontFamily: "'Cormorant Garamond','Georgia',serif" }}>
-        Each piece is handled with care and shipped within 5–7 business days.
+        Each piece is handled with care and shipped within 7–14 business days.
       </p>
 
       {sessionId && (

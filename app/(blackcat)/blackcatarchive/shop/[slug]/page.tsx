@@ -111,7 +111,7 @@ export default function ProductPage() {
         inventory,description,shortDescription,
         isOneOfOne,hasApparel,isArchiveDrop,
         availableSizes,sizeChart,physicalSpecs,
-        unitRange,archiveFileNumber,
+        unitRange,archiveFileNumber,presale,presaleShipsBy,
         heroLore,hoverLore,
         archiveContext,constructionSpecs,
         closingLine,closingStamp
@@ -562,6 +562,27 @@ export default function ProductPage() {
                 style={{ fontFamily: "'Courier Prime',monospace", color: "rgba(180,15,15,0.45)" }}>
                 Archive Sealed
               </span>
+            </div>
+          )}
+
+
+          {/* Presale notice */}
+          {product.presale && !product.isOneOfOne && !sealed && (
+            <div className="flex items-start gap-2 mb-4 px-3 py-2.5"
+              style={{ background: "rgba(180,15,15,0.08)", border: "1px solid rgba(180,15,15,0.25)" }}>
+              <svg className="w-3 h-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="rgba(220,80,80,0.7)" strokeWidth={2}>
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <div>
+                <p className="text-[7.5px] tracking-[0.35em] uppercase mb-0.5"
+                  style={{ fontFamily: "'Courier Prime',monospace", color: "rgba(220,80,80,0.8)" }}>
+                  Pre-Sale Item
+                </p>
+                <p className="text-[7.5px] leading-relaxed"
+                  style={{ fontFamily: "'Courier Prime',monospace", color: "rgba(232,228,223,0.35)" }}>
+                  {product.presaleShipsBy || "Ships 7–14 business days after the presale window closes."}
+                </p>
+              </div>
             </div>
           )}
 

@@ -458,6 +458,21 @@ export const product = {
       description: "The final bold statement. e.g. 'Every Good Archive Needs a Loyal Watch Dog.'",
     },
     {
+      name: "presale",
+      type: "boolean",
+      title: "Pre-Sale",
+      group: "display",
+      description: "Mark this product as a pre-sale item. Shows a PRE-SALE badge on cards and a shipping notice on the product page.",
+      initialValue: false,
+    },
+    {
+      name: "presaleShipsBy",
+      type: "string",
+      title: "Pre-Sale Ships By (note)",
+      group: "display",
+      description: 'e.g. "Ships 7–14 business days after close date" or "Expected to ship June 2025"',
+    },
+    {
       name: "unitRange",
       type: "string",
       title: "Unit Range",

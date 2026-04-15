@@ -38,7 +38,7 @@ function OrderConfirmedContent() {
         <p className="text-xs text-white/35 leading-relaxed mb-6"
           style={{ fontFamily:"'Courier Prime',monospace" }}>
           Order confirmed. A receipt has been sent to your email.
-          Ships within 5–10 business days (US only).
+          Ships within 7–14 business days (US only).
           Check your spam folder if you don&apos;t see it.
         </p>
 

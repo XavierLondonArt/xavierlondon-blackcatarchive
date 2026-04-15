@@ -10,8 +10,8 @@ const SHIPPING_RATES = {
       fixed_amount: { amount: 699, currency: "usd" },
       display_name: "Standard Shipping (USPS)",
       delivery_estimate: {
-        minimum: { unit: "business_day" as const, value: 5  },
-        maximum: { unit: "business_day" as const, value: 10 },
+        minimum: { unit: "business_day" as const, value: 7  },
+        maximum: { unit: "business_day" as const, value: 14 },
       },
     },
   },

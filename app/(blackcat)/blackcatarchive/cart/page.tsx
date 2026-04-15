@@ -222,7 +222,7 @@ export default function CartPage() {
                 </p>
                 <div className="space-y-2">
                   {([
-                    { id: "standard", label: "Standard (USPS)", sub: "5–10 business days", price: SHIPPING_STANDARD },
+                    { id: "standard", label: "Standard (USPS)", sub: "7–14 business days", price: SHIPPING_STANDARD },
                     { id: "priority", label: "Priority Mail",   sub: "2–4 business days",  price: SHIPPING_PRIORITY },
                   ] as const).map(opt => (
                     <label key={opt.id}

@@ -126,7 +126,7 @@ interface EmailData {
 function xavierEmail({ orderRef, orderItems, total, sizes, shipping, customer }: EmailData) {
   const shippingLabel = shipping === 1499
     ? "Priority Mail (2–4 business days)"
-    : "Standard Shipping (5–10 business days)";
+    : "Standard Shipping (7–14 business days)";
 
   const rows = orderItems.map(i => `
     <tr>
@@ -157,7 +157,7 @@ function xavierEmail({ orderRef, orderItems, total, sizes, shipping, customer }:
   <p style="font-size:14px;font-weight:300;color:rgba(26,26,26,0.6);line-height:1.8;margin:0 0 32px;">
     Thank you${customer?.name ? `, ${customer.name.split(" ")[0]}` : ""}.
     Your order has been received and is being prepared with care.
-    Each piece ships within 5–7 business days.
+    Each piece ships within 7–14 business days.
   </p>
 
   <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">${rows}</table>
@@ -202,7 +202,7 @@ function xavierEmail({ orderRef, orderItems, total, sizes, shipping, customer }:
 function blackcatEmail({ orderRef, orderItems, total, sizes, shipping, customer }: EmailData) {
   const shippingLabel = shipping === 1499
     ? "Priority Mail (2–4 business days)"
-    : "Standard Shipping (5–10 business days)";
+    : "Standard Shipping (7–14 business days)";
 
   const rows = orderItems.map(i => `
     <tr>
@@ -232,7 +232,7 @@ function blackcatEmail({ orderRef, orderItems, total, sizes, shipping, customer 
 
   <p style="font-size:12px;color:rgba(232,228,223,0.45);line-height:1.85;margin:0 0 32px;">
     Order confirmed${customer?.name ? `, ${customer.name.split(" ")[0]}` : ""}.
-    Your piece is being prepared. Ships within 5–10 business days. US only.
+    Your piece is being prepared. Ships within 7–14 business days. US only.
   </p>
 
   <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">${rows}</table>

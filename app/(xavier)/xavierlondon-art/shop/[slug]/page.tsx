@@ -156,7 +156,7 @@ export default function XavierProductPage() {
       `*[_type=="product"&&slug.current=="${slug}"&&brand=="xavier"][0]{
         _id,title,slug,category,price,stripePriceId,
         images[]{asset{_ref},caption},
-        inventory,description,shortDescription,
+        inventory,description,shortDescription,presale,presaleShipsBy,
         isOneOfOne,hasApparel,availableSizes,sizeChart,physicalSpecs
       }`
     );
@@ -394,6 +394,27 @@ export default function XavierProductPage() {
 
               {error && (
                 <p className="text-[10px] text-red-500/70 tracking-wide">{error}</p>
+              )}
+
+
+              {/* Presale notice */}
+              {product.presale && (
+                <div className="flex items-start gap-2 px-3 py-2.5 mb-2"
+                  style={{ background: "rgba(26,26,26,0.04)", border: "1px solid rgba(26,26,26,0.15)" }}>
+                  <svg className="w-3 h-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="rgba(26,26,26,0.4)" strokeWidth={2}>
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <div>
+                    <p className="text-[7.5px] tracking-[0.35em] uppercase mb-0.5"
+                      style={{ fontFamily: "'Cormorant Garamond','Georgia',serif", color: "rgba(26,26,26,0.55)" }}>
+                      Pre-Sale
+                    </p>
+                    <p className="text-[10px] leading-relaxed"
+                      style={{ fontFamily: "'Cormorant Garamond','Georgia',serif", color: "rgba(26,26,26,0.4)" }}>
+                      {product.presaleShipsBy || "Ships 7–14 business days after the presale window closes."}
+                    </p>
+                  </div>
+                </div>
               )}
 
               <div className="flex flex-col gap-2.5">

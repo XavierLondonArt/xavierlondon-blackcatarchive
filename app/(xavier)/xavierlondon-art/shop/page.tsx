@@ -23,6 +23,8 @@ interface SanityProduct {
   isOneOfOne: boolean;
   featured: boolean;
   shortDescription?: string;
+  presale?: boolean;
+  presaleShipsBy?: string;
 }
 
 function imgUrl(ref: string, projectId: string, w = 700) {
@@ -42,7 +44,7 @@ export default function XavierShopPage() {
       `*[_type=="product"&&brand=="xavier"&&category in ["art","reproduction"]]|order(featured desc,_createdAt desc){
         _id,title,slug,category,price,
         images[]{asset{_ref}},
-        inventory,isOneOfOne,featured,shortDescription
+        inventory,isOneOfOne,featured,shortDescription,presale,presaleShipsBy
       }`
     );
     fetch(`https://${projectId}.api.sanity.io/v2021-10-21/data/query/production?query=${query}`)
@@ -194,6 +196,22 @@ function ProductCard({ product, index, projectId }: {
           </div>
         )}
 
+        {/* Pre-Sale badge */}
+        {product.presale && !sold && (
+          <div className="absolute top-2 right-2">
+            <span className="text-[7px] tracking-[0.3em] uppercase px-2 py-0.5"
+              style={{
+                fontFamily: "'Cormorant Garamond','Georgia',serif",
+                background: "rgba(26,26,26,0.07)",
+                border: "1px solid rgba(26,26,26,0.25)",
+                color: "rgba(26,26,26,0.55)",
+                letterSpacing: "0.3em",
+              }}>
+              Pre-Sale
+            </span>
+          </div>
+        )}
+
         {/* Image dots on hover */}
         {hovered && images.length > 1 && (
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
@@ -223,7 +241,7 @@ function ProductCard({ product, index, projectId }: {
           </p>
         )}
         <p className="text-[10px] tracking-wider text-[#1a1a1a]/40 mt-2">
-          {product.isOneOfOne ? "Inquiry only" : sold ? "—" : `$${product.price}`}
+          {product.isOneOfOne ? "Inquiry only" : sold ? "—" : product.presale ? `Pre-Sale · $${product.price}` : `$${product.price}`}
         </p>
       </div>
     </Link>

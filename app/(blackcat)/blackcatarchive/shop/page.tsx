@@ -32,6 +32,8 @@ interface SanityProduct {
   unitRange?: string;
   shortDescription?: string;
   hoverLore?: string;
+  presale?: boolean;
+  presaleShipsBy?: string;
 }
 
 export default function ShopPage() {
@@ -46,7 +48,7 @@ export default function ShopPage() {
         _id,title,slug,category,price,
         images[]{asset{_ref}},
         inventory,isOneOfOne,featured,isArchiveDrop,
-        archiveFileNumber,unitRange,shortDescription,hoverLore
+        archiveFileNumber,unitRange,shortDescription,hoverLore,presale,presaleShipsBy
       }`
     );
     fetch(`https://${projectId}.api.sanity.io/v2021-10-21/data/query/production?query=${query}`)
@@ -276,6 +278,20 @@ function StandardProductCard({
             </span>
           </div>
         )}
+
+        {product.presale && !sealed && (
+          <div className="absolute top-2 right-2 z-10">
+            <span className="text-[7px] tracking-[0.3em] uppercase px-2 py-0.5"
+              style={{
+                fontFamily: "'Courier Prime',monospace",
+                background: "rgba(180,15,15,0.18)",
+                border: "1px solid rgba(180,15,15,0.45)",
+                color: "rgba(220,80,80,0.9)",
+              }}>
+              Pre-Sale
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="p-3">
@@ -285,7 +301,7 @@ function StandardProductCard({
         </h3>
         <p className="text-[10px] text-white/28 mt-1"
           style={{ fontFamily: "'Courier Prime',monospace" }}>
-          {product.isOneOfOne ? "Inquiry" : sealed ? "Sealed" : `$${product.price}`}
+          {product.isOneOfOne ? "Inquiry" : sealed ? "Sealed" : product.presale ? `Pre-Sale · $${product.price}` : `$${product.price}`}
         </p>
       </div>
     </Link>
