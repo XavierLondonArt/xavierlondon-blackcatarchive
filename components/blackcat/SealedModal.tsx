@@ -19,10 +19,14 @@ export interface SealedProduct {
   slug: { current: string };
   category: string;
   price: number;
+  inventory: number;
   images: Array<{ asset: { _ref: string }; caption?: string }>;
   description?: any[];
   shortDescription?: string;
   hasApparel?: boolean;
+  isOneOfOne?: boolean;
+  isArchiveDrop?: boolean;
+  hoverLore?: string;
   sizeChart?: {
     columns: string[];
     rows: Array<{ size: string; measurements: string[] }>;
@@ -246,7 +250,7 @@ export function SealedModal({ product, projectId, onClose }: SealedModalProps) {
                     Specifications
                   </p>
                   <dl className="space-y-2">
-                    {product.physicalSpecs.specRows.map((row, i) => (
+                    {product.physicalSpecs?.specRows.map((row, i) => (
                       <div key={i} className="flex gap-3">
                         <dt className="text-[9px] tracking-[0.3em] uppercase text-white/25 w-24 flex-shrink-0"
                           style={{ fontFamily: "'Courier Prime',monospace" }}>
@@ -271,7 +275,7 @@ export function SealedModal({ product, projectId, onClose }: SealedModalProps) {
                   </p>
                   <div className="overflow-x-auto">
                     <table className="w-full text-[9px]" style={{ fontFamily: "'Courier Prime',monospace" }}>
-                      {product.sizeChart.columns?.length > 0 && (
+                      {product.sizeChart?.columns?.length > 0 && (
                         <thead>
                           <tr className="border-b border-white/10">
                             {product.sizeChart.columns.map((col, i) => (
@@ -283,7 +287,7 @@ export function SealedModal({ product, projectId, onClose }: SealedModalProps) {
                         </thead>
                       )}
                       <tbody>
-                        {product.sizeChart.rows.map((row, i) => (
+                        {product.sizeChart?.rows.map((row, i) => (
                           <tr key={i} className="border-b border-white/5">
                             <td className="px-2 py-1.5 text-white/55 font-bold">{row.size}</td>
                             {(row.measurements ?? []).map((m, j) => (
@@ -293,7 +297,7 @@ export function SealedModal({ product, projectId, onClose }: SealedModalProps) {
                         ))}
                       </tbody>
                     </table>
-                    {product.sizeChart.note && (
+                    {product.sizeChart?.note && (
                       <p className="text-[7.5px] text-white/18 mt-2"
                         style={{ fontFamily: "'Courier Prime',monospace" }}>
                         {product.sizeChart.note}
