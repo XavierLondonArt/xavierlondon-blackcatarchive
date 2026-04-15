@@ -66,13 +66,21 @@ export async function POST(req: NextRequest) {
           );
         }
       }
-      lineItems = body.cartItems.map((item: any) => ({
-        price:    item.stripePriceId,
-        quantity: item.quantity ?? 1,
+      // Stripe rejects duplicate price IDs in line_items.
+      // When a customer adds the same product in multiple sizes they share one
+      // stripePriceId, so merge them into a single line item with summed qty.
+      // Sizes are preserved in metadata for fulfilment.
+      const merged: Record<string, number> = {};
+      for (const item of body.cartItems) {
+        merged[item.stripePriceId] = (merged[item.stripePriceId] ?? 0) + (item.quantity ?? 1);
+      }
+      lineItems = Object.entries(merged).map(([priceId, qty]) => ({
+        price:    priceId,
+        quantity: qty,
       }));
       metadata.sizes = body.cartItems
         .filter((i: any) => i.size && i.size !== "N/A")
-        .map((i: any) => `${i.productTitle}: ${i.size}`)
+        .map((i: any) => `${i.productTitle} (${i.size}) ×${i.quantity ?? 1}`)
         .join(", ")
         .slice(0, 480);
       metadata.brand          = brand;
