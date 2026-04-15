@@ -2,7 +2,6 @@
 
 import { sanityClient, QUERIES } from "../../../lib/sanity";
 import Link from "next/link";
-import Image from "next/image";
 
 function getYouTubeThumbnail(url: string) {
   const match = url?.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -77,11 +76,15 @@ export default async function ArchiveTVPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
               {(eps as any[]).map((ep) => {
-                const thumb = ep.thumbnail
-                  ? ep.thumbnail
-                  : ep.youtubeUrl
-                  ? getYouTubeThumbnail(ep.youtubeUrl)
+                const rawThumb = ep.thumbnail;
+                // Sanity image objects come back as {} when field is set but no asset uploaded — guard against that
+                const sanityThumbUrl = rawThumb?.asset?._ref
+                  ? `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/production/${
+                      rawThumb.asset._ref.replace("image-", "").replace(/-([a-z]+)$/, ".$1")
+                    }?w=800&auto=format`
                   : null;
+                const thumb: string | null = sanityThumbUrl
+                  ?? (ep.youtubeUrl ? getYouTubeThumbnail(ep.youtubeUrl) : null);
 
                 return (
                   <Link
@@ -89,19 +92,11 @@ export default async function ArchiveTVPage() {
                     href={`/blackcatarchive/archive-tv/${ep.slug?.current}`}
                     className="group relative overflow-hidden bg-[#111] aspect-video block"
                   >
-                    {thumb && typeof thumb === "string" ? (
+                    {thumb ? (
                       <img
                         src={thumb}
                         alt={ep.title}
                         className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-400"
-                      />
-                    ) : thumb ? (
-                      <Image
-                        src={thumb}
-                        alt={ep.title}
-                        fill
-                        className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-400"
-                        sizes="(max-width: 768px) 100vw, 33vw"
                       />
                     ) : (
                       <div className="absolute inset-0 bg-[#111]" />

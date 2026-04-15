@@ -95,6 +95,7 @@ export default function XavierLayout({ children }: { children: React.ReactNode }
               </ul>
             </div>
 
+            {/* Info links — coming soon
             <div>
               <p className="text-[9px] tracking-[0.5em] uppercase text-[#1a1a1a]/35 mb-5">Info</p>
               <ul className="space-y-2.5">
@@ -107,6 +108,7 @@ export default function XavierLayout({ children }: { children: React.ReactNode }
                 ))}
               </ul>
             </div>
+            */}
 
             <div>
               <p className="text-[9px] tracking-[0.5em] uppercase text-[#1a1a1a]/35 mb-5">Stay in touch</p>
