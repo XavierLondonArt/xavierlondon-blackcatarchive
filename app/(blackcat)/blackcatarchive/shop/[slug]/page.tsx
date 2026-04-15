@@ -110,7 +110,7 @@ export default function ProductPage() {
         images[]{asset{_ref},caption},
         inventory,description,shortDescription,
         isOneOfOne,hasApparel,isArchiveDrop,
-        availableSizes,sizeChart,physicalSpecs,
+        sizeVariants[]{ size, quantity },sizeChart,physicalSpecs,
         unitRange,archiveFileNumber,presale,presaleShipsBy,
         heroLore,hoverLore,
         archiveContext,constructionSpecs,
@@ -130,7 +130,16 @@ export default function ProductPage() {
   };
 
   const images   = product?.images ?? [];
-  const sealed   = !loading && product && product.inventory === 0;
+  // For apparel, total remaining = sum of all sizeVariant quantities
+  const sizeVariants: { size: string; quantity: number }[] = product?.sizeVariants ?? [];
+  const apparelTotal = sizeVariants.length > 0
+    ? sizeVariants.reduce((s: number, v: any) => s + (v.quantity ?? 0), 0)
+    : null;
+  const sealed   = !loading && product && (
+    product.hasApparel
+      ? apparelTotal !== null && apparelTotal === 0
+      : product.inventory === 0
+  );
   const lowStock = product?.inventory > 0 && product?.inventory <= 10;
 
   // isArchive: any archive signal present
@@ -175,7 +184,9 @@ export default function ProductPage() {
           }?w=200&auto=format`
         : undefined,
       stripePriceId: product.stripePriceId,
-      inventory:    product.inventory,
+      inventory:    product.hasApparel
+        ? (sizeVariants.find((v: any) => v.size === (selectedSize || "N/A"))?.quantity ?? product.inventory)
+        : product.inventory,
     });
     // Flash confirmation then route to cart
     setBuying(true);
@@ -460,18 +471,40 @@ export default function ProductPage() {
                 </button>
               </div>
               <div className="flex flex-wrap gap-2 mb-3">
-                {(product.availableSizes ?? []).map((size: string) => {
-                  const display = size === "2XL" ? "XXL" : size;
+                {(sizeVariants.length > 0 ? sizeVariants : []).map((variant: { size: string; quantity: number }) => {
+                  const display  = variant.size === "2XL" ? "XXL" : variant.size;
+                  const soldOut  = variant.quantity === 0;
+                  const low      = !soldOut && variant.quantity <= 3;
                   return (
-                    <button key={size} onClick={() => { setSelectedSize(size); setError(""); }}
-                      className="px-4 py-2 text-[10px] tracking-[0.3em] uppercase transition-all duration-200"
+                    <button key={variant.size}
+                      disabled={soldOut}
+                      onClick={() => { if (!soldOut) { setSelectedSize(variant.size); setError(""); } }}
+                      className="relative px-4 py-2 text-[10px] tracking-[0.3em] uppercase transition-all duration-200"
                       style={{
                         fontFamily: "'Courier Prime',monospace",
-                        border:     selectedSize === size ? "1px solid rgba(232,228,223,0.55)" : "1px solid rgba(232,228,223,0.1)",
-                        color:      selectedSize === size ? "rgba(232,228,223,0.9)" : "rgba(232,228,223,0.3)",
-                        background: selectedSize === size ? "rgba(232,228,223,0.04)" : "transparent",
+                        border:     soldOut    ? "1px solid rgba(232,228,223,0.04)"
+                                  : selectedSize === variant.size ? "1px solid rgba(232,228,223,0.55)"
+                                  : "1px solid rgba(232,228,223,0.1)",
+                        color:      soldOut    ? "rgba(232,228,223,0.15)"
+                                  : selectedSize === variant.size ? "rgba(232,228,223,0.9)"
+                                  : "rgba(232,228,223,0.3)",
+                        background: selectedSize === variant.size ? "rgba(232,228,223,0.04)" : "transparent",
+                        cursor:     soldOut ? "not-allowed" : "pointer",
+                        textDecoration: soldOut ? "line-through" : "none",
                       }}>
                       {display}
+                      {soldOut && (
+                        <span className="ml-1.5 text-[6px] tracking-[0.2em]"
+                          style={{ color: "rgba(180,15,15,0.5)" }}>
+                          OUT
+                        </span>
+                      )}
+                      {low && !soldOut && (
+                        <span className="ml-1.5 text-[6px] tracking-[0.2em]"
+                          style={{ color: "rgba(200,150,50,0.75)" }}>
+                          {variant.quantity} LEFT
+                        </span>
+                      )}
                     </button>
                   );
                 })}

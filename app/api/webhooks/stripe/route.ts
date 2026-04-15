@@ -47,26 +47,87 @@ export async function POST(req: NextRequest) {
     const brand     = session.metadata?.brand ?? "blackcat";
     const isXavier  = brand === "xavier";
 
-    // ── 2. Decrement Sanity inventory for each line item ──────────────────
-    for (const item of lineItems) {
-      const priceId = item.price?.id;
-      const qty     = item.quantity ?? 1;
-      if (!priceId) continue;
-
+    // ── 2. Decrement Sanity inventory ────────────────────────────────────
+    // Use structured sizeItems metadata when available (apparel with per-size
+    // quantities). Fall back to line-item-level decrement for non-apparel.
+    const sizeItems: { priceId: string; size: string; qty: number }[] = (() => {
       try {
-        const product = await sanityWrite.fetch<{ _id: string; inventory: number } | null>(
-          `*[_type == "product" && stripePriceId == $priceId][0]{ _id, inventory }`,
-          { priceId }
-        );
+        return session.metadata?.sizeItems ? JSON.parse(session.metadata.sizeItems) : [];
+      } catch { return []; }
+    })();
 
-        if (product && typeof product.inventory === "number") {
-          const newInventory = Math.max(0, product.inventory - qty);
-          await sanityWrite.patch(product._id).set({ inventory: newInventory }).commit();
-          console.log(`✓ Inventory: ${product._id} → ${newInventory}`);
+    if (sizeItems.length > 0) {
+      // Group by priceId so we fetch each product once
+      const byPrice: Record<string, { size: string; qty: number }[]> = {};
+      for (const si of sizeItems) {
+        (byPrice[si.priceId] ??= []).push({ size: si.size, qty: si.qty });
+      }
+
+      for (const [priceId, entries] of Object.entries(byPrice)) {
+        try {
+          const product = await sanityWrite.fetch<{
+            _id: string;
+            inventory: number;
+            sizeVariants: { _key: string; size: string; quantity: number }[];
+          } | null>(
+            `*[_type == "product" && stripePriceId == $priceId][0]{
+              _id, inventory,
+              sizeVariants[]{ _key, size, quantity }
+            }`,
+            { priceId }
+          );
+          if (!product) continue;
+
+          let patch = sanityWrite.patch(product._id);
+          let totalDeducted = 0;
+
+          if (product.sizeVariants?.length > 0) {
+            // Decrement each matching size variant
+            for (const entry of entries) {
+              if (entry.size === "N/A") { totalDeducted += entry.qty; continue; }
+              const idx = product.sizeVariants.findIndex(v => v.size === entry.size);
+              if (idx === -1) { totalDeducted += entry.qty; continue; }
+              const newQty = Math.max(0, product.sizeVariants[idx].quantity - entry.qty);
+              patch = patch.set({ [`sizeVariants[${idx}].quantity`]: newQty });
+              totalDeducted += entry.qty;
+              console.log(`✓ Size inventory: ${product._id} ${entry.size} → ${newQty}`);
+            }
+          } else {
+            // No sizeVariants — fall back to total inventory
+            for (const e of entries) totalDeducted += e.qty;
+          }
+
+          // Always decrement the total inventory field too
+          if (typeof product.inventory === "number") {
+            const newInv = Math.max(0, product.inventory - totalDeducted);
+            patch = patch.set({ inventory: newInv });
+            console.log(`✓ Total inventory: ${product._id} → ${newInv}`);
+          }
+
+          await patch.commit();
+        } catch (err) {
+          console.error("Inventory decrement failed for price", priceId, err);
         }
-      } catch (err) {
-        // Log but don't block — email still sends even if inventory patch fails
-        console.error("Inventory decrement failed for price", priceId, err);
+      }
+    } else {
+      // Non-apparel / legacy path: decrement total inventory by line item qty
+      for (const item of lineItems) {
+        const priceId = item.price?.id;
+        const qty     = item.quantity ?? 1;
+        if (!priceId) continue;
+        try {
+          const product = await sanityWrite.fetch<{ _id: string; inventory: number } | null>(
+            `*[_type == "product" && stripePriceId == $priceId][0]{ _id, inventory }`,
+            { priceId }
+          );
+          if (product && typeof product.inventory === "number") {
+            const newInventory = Math.max(0, product.inventory - qty);
+            await sanityWrite.patch(product._id).set({ inventory: newInventory }).commit();
+            console.log(`✓ Inventory: ${product._id} → ${newInventory}`);
+          }
+        } catch (err) {
+          console.error("Inventory decrement failed for price", priceId, err);
+        }
       }
     }
 

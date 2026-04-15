@@ -83,6 +83,14 @@ export async function POST(req: NextRequest) {
         .map((i: any) => `${i.productTitle} (${i.size}) ×${i.quantity ?? 1}`)
         .join(", ")
         .slice(0, 480);
+      // Structured size breakdown for webhook to decrement per-size inventory
+      metadata.sizeItems = JSON.stringify(
+        body.cartItems.map((i: any) => ({
+          priceId: i.stripePriceId,
+          size:    i.size ?? "N/A",
+          qty:     i.quantity ?? 1,
+        }))
+      ).slice(0, 480);
       metadata.brand          = brand;
       metadata.shippingChoice = selectedShipping ?? "standard";
     } else {

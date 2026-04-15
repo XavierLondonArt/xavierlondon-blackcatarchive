@@ -157,7 +157,7 @@ export default function XavierProductPage() {
         _id,title,slug,category,price,stripePriceId,
         images[]{asset{_ref},caption},
         inventory,description,shortDescription,presale,presaleShipsBy,
-        isOneOfOne,hasApparel,availableSizes,sizeChart,physicalSpecs
+        isOneOfOne,hasApparel,sizeVariants[]{ size, quantity },sizeChart,physicalSpecs
       }`
     );
     fetch(`https://${projectId}.api.sanity.io/v2021-10-21/data/query/production?query=${query}`)
@@ -186,7 +186,9 @@ export default function XavierProductPage() {
                        ? imgUrl(product.images[0].asset._ref, projectId, 400)
                        : undefined,
       stripePriceId: product.stripePriceId ?? "",
-      inventory:     product.inventory,
+      inventory:     product.hasApparel
+          ? (sizeVariants.find((v: any) => v.size === (selectedSize || "N/A"))?.quantity ?? product.inventory)
+          : product.inventory,
     });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2200);
@@ -259,7 +261,15 @@ export default function XavierProductPage() {
   }
 
   const images    = product.images ?? [];
-  const sold      = product.inventory === 0 && !product.isOneOfOne;
+  const sizeVariants: { size: string; quantity: number }[] = product?.sizeVariants ?? [];
+  const apparelTotal = sizeVariants.length > 0
+    ? sizeVariants.reduce((s: number, v: any) => s + (v.quantity ?? 0), 0)
+    : null;
+  const sold = !product.isOneOfOne && (
+    product.hasApparel
+      ? apparelTotal !== null && apparelTotal === 0
+      : product.inventory === 0
+  );
   const isInquiry = product.isOneOfOne || product.category === "archival";
   const mainSrc   = images[activeImg]?.asset?._ref ? imgUrl(images[activeImg].asset._ref, projectId) : null;
 
@@ -370,24 +380,46 @@ export default function XavierProductPage() {
           {!isInquiry && !sold && (
             <div className="space-y-4 mb-8">
               {/* Size selector */}
-              {product.hasApparel && product.availableSizes?.length > 0 && (
+              {product.hasApparel && sizeVariants.length > 0 && (
                 <div>
                   <p className="text-[8px] tracking-[0.4em] uppercase text-[#1a1a1a]/35 mb-3">
                     Select size
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {product.availableSizes.map((size: string) => (
-                      <button key={size} onClick={() => setSelectedSize(size)}
-                        className="px-4 py-2 text-xs tracking-widest uppercase border transition-all duration-200"
-                        style={{
-                          fontFamily:      "'Cormorant Garamond','Georgia',serif",
-                          borderColor:     selectedSize === size ? "rgba(26,26,26,0.6)" : "rgba(26,26,26,0.15)",
-                          color:           selectedSize === size ? "rgba(26,26,26,0.85)" : "rgba(26,26,26,0.4)",
-                          backgroundColor: selectedSize === size ? "rgba(26,26,26,0.04)" : "transparent",
-                        }}>
-                        {size}
-                      </button>
-                    ))}
+                    {sizeVariants.map((variant: { size: string; quantity: number }) => {
+                      const soldOut = variant.quantity === 0;
+                      const low     = !soldOut && variant.quantity <= 3;
+                      return (
+                        <button key={variant.size}
+                          disabled={soldOut}
+                          onClick={() => { if (!soldOut) setSelectedSize(variant.size); }}
+                          className="relative px-4 py-2 text-xs tracking-widest uppercase border transition-all duration-200"
+                          style={{
+                            fontFamily:      "'Cormorant Garamond','Georgia',serif",
+                            borderColor:     soldOut ? "rgba(26,26,26,0.08)"
+                                           : selectedSize === variant.size ? "rgba(26,26,26,0.6)" : "rgba(26,26,26,0.15)",
+                            color:           soldOut ? "rgba(26,26,26,0.2)"
+                                           : selectedSize === variant.size ? "rgba(26,26,26,0.85)" : "rgba(26,26,26,0.4)",
+                            backgroundColor: selectedSize === variant.size ? "rgba(26,26,26,0.04)" : "transparent",
+                            cursor:          soldOut ? "not-allowed" : "pointer",
+                            textDecoration:  soldOut ? "line-through" : "none",
+                          }}>
+                          {variant.size}
+                          {soldOut && (
+                            <span className="ml-1.5 text-[7px] tracking-wider"
+                              style={{ color: "rgba(26,26,26,0.3)", fontStyle: "italic" }}>
+                              sold out
+                            </span>
+                          )}
+                          {low && !soldOut && (
+                            <span className="ml-1.5 text-[7px] tracking-wider"
+                              style={{ color: "rgba(160,100,30,0.8)" }}>
+                              {variant.quantity} left
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}

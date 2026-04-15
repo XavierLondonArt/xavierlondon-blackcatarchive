@@ -323,19 +323,44 @@ export const product = {
       ],
     },
 
-    // Available sizes checkboxes
+    // Per-size inventory — replaces the old flat availableSizes checklist
     {
-      name: "availableSizes",
+      name: "sizeVariants",
       type: "array",
-      title: "Available Sizes",
+      title: "Size Inventory",
       group: "specs",
-      description: "Check all sizes currently in stock.",
-      of: [{ type: "string" }],
-      options: {
-        list: ["XXS","XS","S","M","L","XL","XXL","3XL","One Size"],
-        layout: "grid",
-      },
+      description: "Add one row per size. Set the quantity you made for each. The site disables a size when its quantity hits 0.",
       hidden: ({ document }: any) => !document?.hasApparel,
+      of: [{
+        type: "object",
+        name: "sizeVariant",
+        title: "Size",
+        fields: [
+          {
+            name: "size",
+            type: "string",
+            title: "Size",
+            options: {
+              list: ["XXS","XS","S","M","L","XL","XXL","3XL","One Size"],
+              layout: "radio",
+            },
+          },
+          {
+            name: "quantity",
+            type: "number",
+            title: "Quantity",
+            description: "How many you made. Decrements automatically on each sale.",
+            initialValue: 0,
+            validation: (R: any) => R.min(0),
+          },
+        ],
+        preview: {
+          select: { title: "size", subtitle: "quantity" },
+          prepare({ title, subtitle }: any) {
+            return { title, subtitle: subtitle != null ? `${subtitle} remaining` : "0 remaining" };
+          },
+        },
+      }],
     },
 
     // Physical dimensions for non-apparel items
