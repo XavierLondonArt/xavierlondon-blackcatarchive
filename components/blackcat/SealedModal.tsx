@@ -243,7 +243,7 @@ export function SealedModal({ product, projectId, onClose }: SealedModalProps) {
               )}
 
               {/* Physical specs (non-apparel) */}
-              {!product.hasApparel && product.physicalSpecs?.specRows?.length > 0 && (
+              {!product.hasApparel && (product.physicalSpecs?.specRows?.length ?? 0) > 0 && (
                 <div className="border-t border-white/8 pt-5">
                   <p className="text-[7px] tracking-[0.6em] uppercase text-white/18 mb-3"
                     style={{ fontFamily: "'Courier Prime',monospace" }}>
@@ -267,7 +267,7 @@ export function SealedModal({ product, projectId, onClose }: SealedModalProps) {
               )}
 
               {/* Size chart (apparel) */}
-              {product.hasApparel && product.sizeChart?.rows?.length > 0 && (
+              {product.hasApparel && (product.sizeChart?.rows?.length ?? 0) > 0 && (
                 <div className="border-t border-white/8 pt-5">
                   <p className="text-[7px] tracking-[0.6em] uppercase text-white/18 mb-3"
                     style={{ fontFamily: "'Courier Prime',monospace" }}>
@@ -275,10 +275,10 @@ export function SealedModal({ product, projectId, onClose }: SealedModalProps) {
                   </p>
                   <div className="overflow-x-auto">
                     <table className="w-full text-[9px]" style={{ fontFamily: "'Courier Prime',monospace" }}>
-                      {product.sizeChart?.columns?.length > 0 && (
+                      {(product.sizeChart?.columns?.length ?? 0) > 0 && (
                         <thead>
                           <tr className="border-b border-white/10">
-                            {product.sizeChart.columns.map((col, i) => (
+                            {product.sizeChart?.columns.map((col, i) => (
                               <th key={i} className="text-left px-2 py-1.5 text-[8px] uppercase tracking-wider text-white/25">
                                 {col}
                               </th>
@@ -300,7 +300,7 @@ export function SealedModal({ product, projectId, onClose }: SealedModalProps) {
                     {product.sizeChart?.note && (
                       <p className="text-[7.5px] text-white/18 mt-2"
                         style={{ fontFamily: "'Courier Prime',monospace" }}>
-                        {product.sizeChart.note}
+                        {product.sizeChart?.note}
                       </p>
                     )}
                   </div>
