@@ -107,6 +107,9 @@ export async function POST(req: NextRequest) {
       shipping_address_collection: { allowed_countries: ["US"] },
       shipping_options:     shippingOptions,
       metadata,
+      // Mirror metadata onto the Payment Intent so sizes/brand are visible
+      // in the Stripe dashboard under Payments (not just Checkout Sessions).
+      payment_intent_data: { metadata },
       success_url: `${baseUrl}/${brand === "xavier" ? "xavierlondon-art" : "blackcatarchive"}/order-confirmed?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${baseUrl}/${brand === "xavier" ? "xavierlondon-art" : "blackcatarchive"}/cart`,
     });
